@@ -106,10 +106,17 @@
 }
 
 .project-card {
-	background: var(--color-bg-alt);
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: var(--color-bg-alt);
 	border-radius: 16px;
 	overflow: hidden;
 	transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.project-card article {
+  height: 100%;
 }
 
 .project-card:hover {
@@ -159,7 +166,7 @@
 	padding: 4px 8px;
 	background: var(--color-bg);
 	border-radius: 4px;
-	color: var(--color-accent);
+	color: var(--color-text-muted);
 }
 
 /* --------------------------------------------------------------------------

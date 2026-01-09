@@ -1,47 +1,5 @@
-/* ==========================================================================
-   GRADE 1: VANILLA CSS PORTFOLIO DEMO
-   Scroll Architecture with IntersectionObserver + CSS scroll-timeline
 
-   🎓 LEARNING OBJECTIVES:
-   - Master CSS Custom Properties (CSS Variables) for scalable design systems
-   - Understand fluid typography using clamp() for responsive text
-   - Implement scroll-driven animations with modern CSS (no JavaScript!)
-   - Create performant animations using transform and opacity only
-   - Build accessible animations with prefers-reduced-motion
-
-   📚 PREREQUISITES:
-   - CSS basics (selectors, box model, positioning)
-   - Understanding of responsive design concepts
-   - Familiarity with CSS transitions and keyframes
-
-   ⚠️ BROWSER SUPPORT:
-   - CSS scroll-timeline: Chrome 115+, Edge 115+, Firefox 110+ (with flag)
-   - IntersectionObserver: 97%+ browser support (excellent fallback)
-   ========================================================================== */
-
-/* --------------------------------------------------------------------------
-   1. CSS CUSTOM PROPERTIES (DESIGN TOKENS)
-
-   🎓 WHY CUSTOM PROPERTIES?
-   Custom properties (CSS variables) create a single source of truth for your
-   design values. Change one variable, update the entire site. This is the
-   foundation of a design system.
-
-   📐 THE clamp() FUNCTION EXPLAINED:
-   clamp(minimum, preferred, maximum)
-
-   Example: clamp(1rem, 0.9rem + 0.5vw, 1.125rem)
-   - minimum: 1rem (16px) — never smaller than this
-   - preferred: 0.9rem + 0.5vw — scales with viewport width
-   - maximum: 1.125rem (18px) — never larger than this
-
-   The "0.9rem + 0.5vw" creates a fluid value that grows as the viewport
-   widens. The 0.5vw adds responsiveness (0.5% of viewport width).
-
-   🧮 FORMULA FOR FLUID VALUES:
-   preferred = min + (max - min) × (current-vw - min-vw) / (max-vw - min-vw)
-   But clamp() does this automatically! You just set the boundaries.
-   -------------------------------------------------------------------------- */
+   
 :root {
 	/*
 	 * FLUID TYPOGRAPHY SCALE
@@ -92,7 +50,7 @@
 	 * Semantic naming (bg, text, accent) makes colors self-documenting.
 	 */
 	--color-bg: #0f0f0f;              /* Near-black background */
-	--color-bg-alt: #1a1a1a;          /* Slightly lighter for depth/sections */
+	--color-bg-alt: #464646;          /* Slightly lighter for depth/sections */
 	--color-text: #ffffff;            /* Off-white for readability (not pure white) */
 	--color-text-muted: #ffffff;      /* Subdued text for secondary content */
 	--color-accent: #000000;          /* Indigo — primary brand color */
