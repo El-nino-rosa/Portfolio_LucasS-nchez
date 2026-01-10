@@ -118,6 +118,24 @@
 	opacity: 1;
 }
 
+/* Caption inside gallery button, aligned to the right */
+.gallery-caption {
+	position: absolute;
+	right: 0.75rem;
+	bottom: 0.75rem;
+	text-align: right; /* align text to the right inside the caption */
+	color: var(--color-text, #fff);
+	background: linear-gradient(90deg, rgba(0,0,0,0.0), rgba(0,0,0,0.45));
+	padding: 0.35rem 0.6rem;
+	border-radius: 6px;
+	backdrop-filter: blur(4px);
+}
+.gallery-caption strong {
+	font-weight: 700;
+	font-size: 0.95rem;
+	line-height: 1;
+}
+
 /* Focus accesible */
 .gallery-item:focus-visible {
 	outline: 2px solid var(--color-text);
