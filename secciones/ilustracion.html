@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<title>Lucas Sánchez | Diseñador Gráfico e Ilustrador</title>
+
+	<meta
+		name="description"
+		content="Portafolio de Lucas Sánchez, diseñador gráfico e ilustrador especializado en ilustración y comunicación visual."
+	/>
+
+	<link rel="stylesheet" href="../assets/css/index.css">
+	<link rel="stylesheet" href="../assets/css/ilustracion.css">
+</head>
+
+<body>
+
+	<!-- Header / Navegación -->
+	<header class="site-header">
+		<nav class="nav">
+			<div class="nav-container">
+				<a href="#top" class="nav-logo">Lucas Sánchez</a>
+
+				<ul class="nav-links">
+					<li><a href="#illustration">Ilustración</a></li>
+					<li><a href="#graphic">Diseño gráfico</a></li>
+					<li><a href="#contact">Contacto</a></li>
+				</ul>
+			</div>
+		</nav>
+	</header>
+
+	<main id="top">
+
+		<!-- Sección Galería -->
+		<section id="illustration" class="section gallery-section">
+			<div class="container">
+				<h2 class="section-title">Ilustración</h2>
+
+				<div class="gallery-grid">
+					<button
+						type="button"
+						class="gallery-item"
+						data-title="Ilustración y Concept Art"
+						data-description="Serie de ilustraciones desarrolladas para exploración conceptual y narrativa visual."
+					>
+						<img
+							src="assets/img/illustration-1.jpg"
+							alt="Ilustración conceptual digital"
+							loading="lazy"
+						/>
+					</button>
+
+					<button
+						type="button"
+						class="gallery-item"
+						data-title="Ilustración Editorial"
+						data-description="Ilustraciones creadas para piezas editoriales y publicaciones gráficas."
+					>
+						<img
+							src="assets/img/illustration-2.jpg"
+							alt="Ilustración editorial"
+							loading="lazy"
+						/>
+					</button>
+				</div>
+			</div>
+		</section>
+
+	</main>
+
+	<!-- Modal de proyecto -->
+	<div class="project-modal" aria-hidden="true">
+		<div class="modal-backdrop"></div>
+
+		<div
+			class="modal-content"
+			role="dialog"
+			aria-modal="true"
+			aria-labelledby="modal-title"
+		>
+			<button
+				type="button"
+				class="modal-close"
+				aria-label="Cerrar proyecto"
+			>
+				×
+			</button>
+
+			<h3 id="modal-title" class="modal-title"></h3>
+			<p class="modal-description"></p>
+
+			<div class="modal-gallery"></div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<footer class="site-footer">
+		<div class="container">
+			<p>
+				© 2025 Lucas Sánchez · Diseñador gráfico e ilustrador
+			</p>
+
+			<ul class="footer-links">
+				<li><a href="mailto:lucas@email.com">Email</a></li>
+				<li><a href="#" target="_blank" rel="noopener">Instagram</a></li>
+				<li><a href="#" target="_blank" rel="noopener">Behance</a></li>
+			</ul>
+		</div>
+	</footer>
+
+	<script src="assets/js/main.js" defer></script>
+</body>
+</html>
