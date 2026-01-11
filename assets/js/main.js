@@ -398,11 +398,26 @@ function initGalleryModal() {
 		images.forEach((src) => {
 			const figure = document.createElement('figure');
 			figure.className = 'modal-item';
-			const img = document.createElement('img');
-			img.src = src;
-			img.alt = title || '';
-			img.loading = 'lazy';
-			figure.appendChild(img);
+
+			// if the source looks like a video file, create a <video>
+			const isVideo = /\.(mp4|webm|ogg)(\?|$)/i.test(src);
+			if (isVideo) {
+				const video = document.createElement('video');
+				video.src = src;
+				video.setAttribute('controls', '');
+				video.setAttribute('playsinline', '');
+				video.preload = 'metadata';
+				video.style.maxWidth = '100%';
+				// prevent autoplay by default; user can play via controls
+				figure.appendChild(video);
+			} else {
+				const img = document.createElement('img');
+				img.src = src;
+				img.alt = title || '';
+				img.loading = 'lazy';
+				figure.appendChild(img);
+			}
+
 			modalGallery.appendChild(figure);
 		});
 
@@ -461,28 +476,34 @@ function initGalleryModal() {
 				images = btn.dataset.images.split(',').map(s => s.trim()).filter(Boolean);
 			}
 
-			// determine the img inside the button (as written in HTML)
-			const innerImg = btn.querySelector('img');
-			const innerSrcAttr = innerImg ? innerImg.getAttribute('src') : null;
+				// determine the img inside the button (as written in HTML)
+				const innerImg = btn.querySelector('img');
+				const innerSrcAttr = innerImg ? innerImg.getAttribute('src') : null;
 
-			// fallback: use the image inside the button if no data-images provided
-			if (!images.length && innerImg && innerImg.src) {
-				images = [innerImg.getAttribute('src')];
-			}
+				// Decide whether to include the button's preview image inside modal
+				// Allow per-button opt-out via data-include-preview="false" or data-exclude-preview="true"
+				const includePreviewAttr = btn.dataset.includePreview;
+				const excludePreviewAttr = btn.dataset.excludePreview;
+				const includePreview = !(includePreviewAttr === 'false' || excludePreviewAttr === 'true');
 
-			// normalize and ensure the clicked button's image appears first
-			if (innerSrcAttr) {
-				// remove duplicates and normalize whitespace
-				images = images.map(s => s.trim()).filter(Boolean);
-				// if innerSrcAttr exists in images, move it to front; otherwise add it to front
-				const idx = images.indexOf(innerSrcAttr);
-				if (idx > -1) {
-					images.splice(idx, 1);
+				// fallback: use the image inside the button if no data-images provided
+				if (!images.length && innerImg && innerImg.src && includePreview) {
+					images = [innerSrcAttr];
 				}
-				images.unshift(innerSrcAttr);
-				// dedupe while preserving order
-				images = Array.from(new Set(images));
-			}
+
+				// normalize and ensure the clicked button's image appears first
+				if (innerSrcAttr && includePreview) {
+					// remove duplicates and normalize whitespace
+					images = images.map(s => s.trim()).filter(Boolean);
+					// if innerSrcAttr exists in images, move it to front; otherwise add it to front
+					const idx = images.indexOf(innerSrcAttr);
+					if (idx > -1) {
+						images.splice(idx, 1);
+					}
+					images.unshift(innerSrcAttr);
+					// dedupe while preserving order
+					images = Array.from(new Set(images));
+				}
 
 			openModal({ title, description, images });
 		});

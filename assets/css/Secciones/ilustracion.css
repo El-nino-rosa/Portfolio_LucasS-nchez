@@ -220,6 +220,15 @@
     display: block;
 }
 
+.modal-gallery .modal-item video {
+	width: 100%;
+	height: auto;
+	max-height: calc(86vh - 6rem);
+	object-fit: contain;
+	display: block;
+	background: #000; /* black background while video loads */
+}
+
 .modal-item {
     display: block;
 }
