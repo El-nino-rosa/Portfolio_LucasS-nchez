@@ -363,22 +363,14 @@ document.addEventListener('DOMContentLoaded', () => {
  * For traditional multi-page sites, this isn't needed (page reload cleans up).
  */
 window.cleanupScrollObservers = () => {
-	singleObserver.disconnect();  // Stop observing all elements
+	singleObserver.disconnect(); 
 	staggerObserver.disconnect();
 	console.log('🧹 Observers cleaned up');
 };
 
-// ==========================================================================
-// 7. GALLERY MODAL
-// ==========================================================================
-
-/**
- * Initialize gallery modal behavior: clicking .gallery-item opens modal
- * It reads dataset.images (comma-separated) or falls back to the button <img> src
- */
 function initGalleryModal() {
 	const modal = document.querySelector('.project-modal');
-	if (!modal) return; // no modal on this page
+	if (!modal) return; 
 
 	const modalTitle = modal.querySelector('#modal-title');
 	const modalDescription = modal.querySelector('.modal-description');
@@ -389,17 +381,14 @@ function initGalleryModal() {
 	let lastFocused = null;
 
 	const openModal = ({ title = '', description = '', images = [] } = {}) => {
-		// populate
 		modalTitle.textContent = title || '';
 		modalDescription.textContent = description || '';
 
-		// clear previous
 		modalGallery.innerHTML = '';
 		images.forEach((src) => {
 			const figure = document.createElement('figure');
 			figure.className = 'modal-item';
 
-			// if the source looks like a video file, create a <video>
 			const isVideo = /\.(mp4|webm|ogg)(\?|$)/i.test(src);
 			if (isVideo) {
 				const video = document.createElement('video');
@@ -408,7 +397,6 @@ function initGalleryModal() {
 				video.setAttribute('playsinline', '');
 				video.preload = 'metadata';
 				video.style.maxWidth = '100%';
-				// prevent autoplay by default; user can play via controls
 				figure.appendChild(video);
 			} else {
 				const img = document.createElement('img');
@@ -421,21 +409,16 @@ function initGalleryModal() {
 			modalGallery.appendChild(figure);
 		});
 
-		// show
 		modal.setAttribute('aria-hidden', 'false');
-		// save focus and focus close button
 		lastFocused = document.activeElement;
 		closeBtn?.focus();
 
-		// add key handler
 		document.addEventListener('keydown', handleKeyDown);
 	};
 
 	const closeModal = () => {
 		modal.setAttribute('aria-hidden', 'true');
-		// remove images
 		modalGallery.innerHTML = '';
-		// restore focus
 		if (lastFocused) lastFocused.focus();
 		document.removeEventListener('keydown', handleKeyDown);
 	};
@@ -444,7 +427,7 @@ function initGalleryModal() {
 		if (e.key === 'Escape') {
 			closeModal();
 		}
-		// simple tab trap: keep focus inside modal when open
+
 		if (e.key === 'Tab') {
 			const focusable = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
 			if (!focusable.length) return;
@@ -460,48 +443,36 @@ function initGalleryModal() {
 		}
 	};
 
-	// close interactions
 	closeBtn?.addEventListener('click', closeModal);
 	backdrop?.addEventListener('click', closeModal);
-
-	// attach click handlers to gallery items
 	document.querySelectorAll('.gallery-item').forEach((btn) => {
 		btn.addEventListener('click', (e) => {
-			// read dataset
 			const title = btn.dataset.title || btn.getAttribute('aria-label') || '';
 			const description = btn.dataset.description || '';
 			let images = [];
 			if (btn.dataset.images) {
-				// allow comma-separated list
+
 				images = btn.dataset.images.split(',').map(s => s.trim()).filter(Boolean);
 			}
 
-				// determine the img inside the button (as written in HTML)
 				const innerImg = btn.querySelector('img');
 				const innerSrcAttr = innerImg ? innerImg.getAttribute('src') : null;
 
-				// Decide whether to include the button's preview image inside modal
-				// Allow per-button opt-out via data-include-preview="false" or data-exclude-preview="true"
 				const includePreviewAttr = btn.dataset.includePreview;
 				const excludePreviewAttr = btn.dataset.excludePreview;
 				const includePreview = !(includePreviewAttr === 'false' || excludePreviewAttr === 'true');
 
-				// fallback: use the image inside the button if no data-images provided
 				if (!images.length && innerImg && innerImg.src && includePreview) {
 					images = [innerSrcAttr];
 				}
 
-				// normalize and ensure the clicked button's image appears first
 				if (innerSrcAttr && includePreview) {
-					// remove duplicates and normalize whitespace
 					images = images.map(s => s.trim()).filter(Boolean);
-					// if innerSrcAttr exists in images, move it to front; otherwise add it to front
 					const idx = images.indexOf(innerSrcAttr);
 					if (idx > -1) {
 						images.splice(idx, 1);
 					}
 					images.unshift(innerSrcAttr);
-					// dedupe while preserving order
 					images = Array.from(new Set(images));
 				}
 
