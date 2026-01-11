@@ -11,6 +11,8 @@
 	font-size: var(--text-3xl);
 	margin-bottom: var(--space-xl);
 	letter-spacing: -0.02em;
+	/* Ensure anchors and in-page navigation don't get hidden by the sticky header */
+	scroll-margin-top: 4rem; /* distance from top when jumping to this element */
 }
 
 /* --------------------------------------------------------------------------
@@ -28,11 +30,13 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: var(--space-md) 0;
+	/* Reduced padding so header is smaller and doesn't cover section titles */
+	padding: 0.45rem 0; /* ~7px top/bottom on small screens, scales visually on larger */
 }
 
 .nav-logo {
-	font-size: var(--text-lg);
+	/* Slightly smaller logo/text to reduce header height on section pages */
+	font-size: var(--text-base);
 	font-weight: 700;
 	text-decoration: none;
 	color: var(--color-text);
@@ -154,7 +158,9 @@
 
 .project-modal[aria-hidden="false"] {
 	display: grid;
+	/* make modal take the full viewport so content can be large */
 	place-items: center;
+	padding: 1.5rem; /* breathing room on small viewports */
 }
 
 .modal-backdrop {
@@ -166,12 +172,14 @@
 .modal-content {
 	position: relative;
 	background-color: var(--color-bg);
-	padding: var(--space-xl);
-	max-width: 900px;
-	width: calc(100% - 2rem);
-	max-height: 90vh;
-	overflow-y: auto;
-	border-radius: 16px;
+	/* make modal almost full-screen */
+	width: 96vw;
+	height: 94vh;
+	max-width: 1200px; /* cap on very large screens */
+	padding: var(--space-lg);
+	max-height: 94vh;
+	overflow: auto;
+	border-radius: 12px;
 }
 
 .modal-close {
@@ -198,8 +206,22 @@
 
 .modal-gallery {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 	gap: var(--space-md);
+	align-items: start;
+}
+
+
+.modal-gallery .modal-item img {
+    width: 100%;
+    height: auto;
+    max-height: calc(86vh - 6rem); 
+    object-fit: contain;
+    display: block;
+}
+
+.modal-item {
+    display: block;
 }
 
 /* --------------------------------------------------------------------------

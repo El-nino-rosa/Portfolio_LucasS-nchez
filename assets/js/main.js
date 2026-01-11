@@ -338,6 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	initScrollAnimations();
 	initSmoothScroll();
 	initActiveNav();
+	initGalleryModal();
 
 	console.log('🚀 Grade 1 Demo: Vanilla scroll animations initialized');
 });
@@ -366,3 +367,124 @@ window.cleanupScrollObservers = () => {
 	staggerObserver.disconnect();
 	console.log('🧹 Observers cleaned up');
 };
+
+// ==========================================================================
+// 7. GALLERY MODAL
+// ==========================================================================
+
+/**
+ * Initialize gallery modal behavior: clicking .gallery-item opens modal
+ * It reads dataset.images (comma-separated) or falls back to the button <img> src
+ */
+function initGalleryModal() {
+	const modal = document.querySelector('.project-modal');
+	if (!modal) return; // no modal on this page
+
+	const modalTitle = modal.querySelector('#modal-title');
+	const modalDescription = modal.querySelector('.modal-description');
+	const modalGallery = modal.querySelector('.modal-gallery');
+	const closeBtn = modal.querySelector('.modal-close');
+	const backdrop = modal.querySelector('.modal-backdrop');
+
+	let lastFocused = null;
+
+	const openModal = ({ title = '', description = '', images = [] } = {}) => {
+		// populate
+		modalTitle.textContent = title || '';
+		modalDescription.textContent = description || '';
+
+		// clear previous
+		modalGallery.innerHTML = '';
+		images.forEach((src) => {
+			const figure = document.createElement('figure');
+			figure.className = 'modal-item';
+			const img = document.createElement('img');
+			img.src = src;
+			img.alt = title || '';
+			img.loading = 'lazy';
+			figure.appendChild(img);
+			modalGallery.appendChild(figure);
+		});
+
+		// show
+		modal.setAttribute('aria-hidden', 'false');
+		// save focus and focus close button
+		lastFocused = document.activeElement;
+		closeBtn?.focus();
+
+		// add key handler
+		document.addEventListener('keydown', handleKeyDown);
+	};
+
+	const closeModal = () => {
+		modal.setAttribute('aria-hidden', 'true');
+		// remove images
+		modalGallery.innerHTML = '';
+		// restore focus
+		if (lastFocused) lastFocused.focus();
+		document.removeEventListener('keydown', handleKeyDown);
+	};
+
+	const handleKeyDown = (e) => {
+		if (e.key === 'Escape') {
+			closeModal();
+		}
+		// simple tab trap: keep focus inside modal when open
+		if (e.key === 'Tab') {
+			const focusable = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+			if (!focusable.length) return;
+			const first = focusable[0];
+			const last = focusable[focusable.length - 1];
+			if (e.shiftKey && document.activeElement === first) {
+				e.preventDefault();
+				last.focus();
+			} else if (!e.shiftKey && document.activeElement === last) {
+				e.preventDefault();
+				first.focus();
+			}
+		}
+	};
+
+	// close interactions
+	closeBtn?.addEventListener('click', closeModal);
+	backdrop?.addEventListener('click', closeModal);
+
+	// attach click handlers to gallery items
+	document.querySelectorAll('.gallery-item').forEach((btn) => {
+		btn.addEventListener('click', (e) => {
+			// read dataset
+			const title = btn.dataset.title || btn.getAttribute('aria-label') || '';
+			const description = btn.dataset.description || '';
+			let images = [];
+			if (btn.dataset.images) {
+				// allow comma-separated list
+				images = btn.dataset.images.split(',').map(s => s.trim()).filter(Boolean);
+			}
+
+			// determine the img inside the button (as written in HTML)
+			const innerImg = btn.querySelector('img');
+			const innerSrcAttr = innerImg ? innerImg.getAttribute('src') : null;
+
+			// fallback: use the image inside the button if no data-images provided
+			if (!images.length && innerImg && innerImg.src) {
+				images = [innerImg.getAttribute('src')];
+			}
+
+			// normalize and ensure the clicked button's image appears first
+			if (innerSrcAttr) {
+				// remove duplicates and normalize whitespace
+				images = images.map(s => s.trim()).filter(Boolean);
+				// if innerSrcAttr exists in images, move it to front; otherwise add it to front
+				const idx = images.indexOf(innerSrcAttr);
+				if (idx > -1) {
+					images.splice(idx, 1);
+				}
+				images.unshift(innerSrcAttr);
+				// dedupe while preserving order
+				images = Array.from(new Set(images));
+			}
+
+			openModal({ title, description, images });
+		});
+	});
+}
